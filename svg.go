@@ -428,25 +428,23 @@ func makeScaleFuncMercator(width, height float64, padding Padding, ps [][]float6
 
 func makeScaleFuncMercatorWithExtent(width, height float64, padding Padding, extent *Extent) scaleFunc {
 
-	sw_pt := orb.Point{extent.MinX, extent.MinY}
-	ne_pt := orb.Point{extent.MaxX, extent.MaxY}
+	ptSW := orb.Point{extent.MinX, extent.MinY}
+	ptNE := orb.Point{extent.MaxX, extent.MaxY}
 
-	sw_merc := project.Point(sw_pt, project.WGS84.ToMercator)
-	ne_merc := project.Point(ne_pt, project.WGS84.ToMercator)
+	mercSW := project.Point(ptSW, project.WGS84.ToMercator)
+	mercNE := project.Point(ptNE, project.WGS84.ToMercator)
 
-	minX := sw_merc[0]
-	minY := sw_merc[1]
+	minX := mercSW[0]
+	minY := mercSW[1]
 
-	maxX := ne_merc[0]
-	maxY := ne_merc[1]
+	maxX := mercNE[0]
+	maxY := mercNE[1]
 
 	w := width - padding.Left - padding.Right
 	h := height - padding.Top - padding.Bottom
 
 	xRes := (maxX - minX) / w
 	yRes := (maxY - minY) / h
-
-	res := math.Max(xRes, yRes)
 
 	return func(x, y float64) (float64, float64) {
 
@@ -456,8 +454,11 @@ func makeScaleFuncMercatorWithExtent(width, height float64, padding Padding, ext
 		x = merc[0]
 		y = merc[1]
 
-		x = (x-minX)/res + padding.Left
-		y = (maxY-y)/res + padding.Top
+		// x = (x-minX)/res + padding.Left
+		// y = (maxY-y)/res + padding.Top
+
+		x = (x-minX)/xRes + padding.Left
+		y = (maxY-y)/yRes + padding.Top
 
 		return x, y
 	}
