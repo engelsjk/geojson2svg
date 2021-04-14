@@ -7,6 +7,8 @@ import (
 	"path"
 	"strings"
 	"testing"
+
+	geojson2svg "github.com/engelsjk/geojson2svg"
 )
 
 const wantEmptySVG = `<svg width="400.000000" height="400.000000"></svg>`
