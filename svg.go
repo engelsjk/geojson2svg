@@ -168,6 +168,13 @@ func WithExtent(e *Extent) Option {
 	}
 }
 
+// WithMercator configures the SVG to use the Mercator projection.
+func WithMercator(m bool) Option {
+	return func(svg *SVG) {
+		svg.Mercator = m
+	}
+}
+
 // UseProperties configures which geojson properties should be copied to the
 // resulting SVG element.
 func UseProperties(props []string) Option {
