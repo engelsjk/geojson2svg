@@ -161,6 +161,13 @@ func WithPadding(p Padding) Option {
 	}
 }
 
+// WithExtent configures the SVG to use the specified extent.
+func WithExtent(e *Extent) Option {
+	return func(svg *SVG) {
+		svg.Extent = e
+	}
+}
+
 // UseProperties configures which geojson properties should be copied to the
 // resulting SVG element.
 func UseProperties(props []string) Option {
