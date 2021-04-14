@@ -377,12 +377,11 @@ func makeScaleFunc(width, height float64, padding Padding, ps [][]float64) scale
 
 	xRes := (maxX - minX) / w
 	yRes := (maxY - minY) / h
-	res := math.Max(xRes, yRes)
 
 	return func(x, y float64) (float64, float64) {
 
-		x = (x-minX)/res + padding.Left
-		y = (maxY-y)/res + padding.Top
+		x = (x-minX)/xRes + padding.Left
+		y = (maxY-y)/yRes + padding.Top
 
 		return x, y
 	}
