@@ -22,7 +22,7 @@ func oneLine(s string) string {
 func empty(t *testing.T) {
 	expected := `<svg width="400.000000" height="400.450000"></svg>`
 
-	svg := New()
+	svg := NewSVG()
 	got := svg.Draw(400, 400.45)
 	if got != expected {
 		t.Errorf("expected %s, got %s", expected, got)
@@ -36,7 +36,7 @@ func withAPoint(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddGeometry(`{"type": "Point", "coordinates": [10.5,20]}`); err != nil {
 		t.Errorf("unexpected error %v", err)
 	}
@@ -54,7 +54,7 @@ func withAMultiPoint(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddGeometry(`{"type": "MultiPoint", "coordinates": [[10.5,20], [20.5,62]]}`); err != nil {
 		t.Errorf("unexpected error %v", err)
 	}
@@ -71,7 +71,7 @@ func withALineString(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddGeometry(`{"type": "LineString", "coordinates": [[10.4,20.5], [40.3,42.3]]}`); err != nil {
 		t.Errorf("unexpected error %v", err)
 	}
@@ -89,7 +89,7 @@ func withAMultiLineString(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddGeometry(`{"type": "MultiLineString", "coordinates": [[[10.4,20.5], [40.3,42.3]], [[11.4,21.5], [41.3,41.3]]]}`); err != nil {
 		t.Errorf("unexpected error %v", err)
 	}
@@ -106,7 +106,7 @@ func withAPolygonWithoutHoles(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddGeometry(`{"type": "Polygon", "coordinates": [[[10.4,20.5], [40.3,42.3], [20.2, 10.2], [10.4,20.5]]]}`); err != nil {
 		t.Errorf("unexpected error %v", err)
 	}
@@ -123,7 +123,7 @@ func withAPolygonWithHoles(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	err := svg.AddGeometry(`{"type": "Polygon", "coordinates": [
 		[[100.0,0.0], [101.0,0.0], [101.0,1.0], [100.0,1.0], [100.0,0.0]],
     [[100.2,0.2], [100.8,0.2], [100.8,0.8], [100.2,0.8], [100.2,0.2]]
@@ -145,7 +145,7 @@ func withAMultiPolygon(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	err := svg.AddGeometry(`{"type": "MultiPolygon", "coordinates": [
 		[
 			[[10.4,20.5], [40.3,42.3], [20.2, 10.2], [10.4,20.5]]
@@ -171,7 +171,7 @@ func withAGeometryCollection(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	err := svg.AddGeometry(`{"type": "GeometryCollection", "geometries": [
 		{"type": "LineString", "coordinates": [[10.4,20.5], [40.3,42.3]]},
 		{"type": "Point", "coordinates": [10.5,20]}
@@ -193,7 +193,7 @@ func withMultipleGeometries(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	err := svg.AddGeometry(`{"type": "LineString", "coordinates": [[10.4,20.5], [40.3,42.3]]}`)
 	if err != nil {
 		t.Errorf("unexpected error %v", err)
@@ -212,7 +212,7 @@ func withAnInvalidGeometry(t *testing.T) {
 	geometry := `"type": "Point", "coordinates": [10.5,20]}`
 	expected := "invalid geometry: " + geometry
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddGeometry(geometry); err == nil || expected != err.Error() {
 		t.Errorf("expected '%s', got %v", expected, err)
 	}
@@ -229,7 +229,7 @@ func withAFeature(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	err := svg.AddFeature(`{"type": "Feature", "geometry": {
 		"type": "Point",
 		"coordinates": [10.5,20]
@@ -250,7 +250,7 @@ func withAnInvalidFeature(t *testing.T) {
 	}}`
 	expected := "invalid feature: " + feature
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddFeature(feature); err == nil || err.Error() != expected {
 		t.Errorf("expected %s, got %v", expected, err)
 	}
@@ -268,7 +268,7 @@ func withAFeatureCollection(t *testing.T) {
 		</svg>
 	`)
 
-	svg := New()
+	svg := NewSVG()
 	err := svg.AddFeatureCollection(`{"type": "FeatureCollection", "features": [
 		{"type": "Feature", "geometry": {
 			"type": "Point",
@@ -301,7 +301,7 @@ func withAnInvalidFeatureCollection(t *testing.T) {
 	]}`
 	expected := "invalid feature collection: " + featureCollection
 
-	svg := New()
+	svg := NewSVG()
 	if err := svg.AddFeatureCollection(featureCollection); err == nil || err.Error() != expected {
 		t.Errorf("expected %s, got %v", expected, err)
 	}
@@ -356,7 +356,7 @@ func TestSVGAttributeOptions(t *testing.T) {
 
 func withAttributeOption(t *testing.T) {
 	want := `<svg width="200.000000" height="200.000000" class="a_class" id="the_id"></svg>`
-	svg := New()
+	svg := NewSVG()
 	got := svg.Draw(200, 200,
 		WithAttribute("id", "the_id"),
 		WithAttribute("class", "a_class"))
@@ -368,7 +368,7 @@ func withAttributeOption(t *testing.T) {
 
 func withAttributeMultipleTimesOption(t *testing.T) {
 	want := `<svg width="200.000000" height="200.000000" class="a_class_2" id="the_id_2"></svg>`
-	svg := New()
+	svg := NewSVG()
 	got := svg.Draw(200, 200,
 		WithAttribute("id", "the_id"),
 		WithAttribute("class", "a_class"),
@@ -388,7 +388,7 @@ func withAttributesOption(t *testing.T) {
 		"class": "a_class",
 	}
 
-	svg := New()
+	svg := NewSVG()
 	got := svg.Draw(200, 200, WithAttributes(attributes))
 
 	if got != want {
@@ -402,7 +402,7 @@ func withAttributesNothingIsLostOption(t *testing.T) {
 	attributesA := map[string]string{"id": "the_id", "class": "a_class"}
 	attributesB := map[string]string{"class": "a_class_2"}
 
-	svg := New()
+	svg := NewSVG()
 	got := svg.Draw(200, 200,
 		WithAttributes(attributesA),
 		WithAttributes(attributesB))
@@ -431,7 +431,7 @@ func TestSVGPaddingOption(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(tt *testing.T) {
-			svg := New()
+			svg := NewSVG()
 			err := svg.AddGeometry(fmt.Sprintf(`{"type": "LineString", "coordinates": %s}`, tc.data))
 			if err != nil {
 				t.Errorf("unexpected error %v", err)
@@ -530,7 +530,7 @@ func TestFeatureProperties(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(tt *testing.T) {
-			svg := New()
+			svg := NewSVG()
 			err := svg.AddFeature(tc.feature)
 
 			if err != nil {
@@ -563,7 +563,7 @@ func TestExample(t *testing.T) {
 		t.Fatalf("unexpected error %v", err)
 	}
 
-	svg := New()
+	svg := NewSVG()
 	err = svg.AddFeatureCollection(string(geojson))
 	if err != nil {
 		t.Fatalf("unexpected error %v", err)
