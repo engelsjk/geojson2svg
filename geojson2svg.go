@@ -2,7 +2,7 @@
 // geometries, features and featurecollections into a SVG image.
 //
 // See the tests for usage examples.
-package svg
+package geojson2svg
 
 import (
 	"bytes"
@@ -51,9 +51,9 @@ type Extent struct{ MinX, MinY, MaxX, MaxY float64 }
 // An Option represents a single SVG option.
 type Option func(*SVG)
 
-// New returns a new SVG that can be used to to draw geojson geometries,
+// NewSVG returns a new SVG that can be used to to draw geojson geometries,
 // features and featurecollections.
-func New() *SVG {
+func NewSVG() *SVG {
 	return &SVG{
 		useProp:    func(prop string) bool { return prop == "class" },
 		attributes: make(map[string]string),
